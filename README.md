@@ -5,7 +5,11 @@ Small easy to use and flexible vanilla JS script for adding CSS3 animations to H
 To install simply add the `scrollaboo.js` file just before your closing `</body>` tag. 
 
 ### Prerequisites
+<<<<<<< HEAD
 Scrollaboo ships with Daniel Eden's ([daneden](https://github.com/daneden)) awesome [animate.css](https://github.com/daneden/animate.css "animate.css").
+=======
+Scrollaboo ships with Daniel Eden's (@daneden) awesome [link](https://github.com/daneden/animate.css "animate.css").
+>>>>>>> 81043f77ecec6feb4d79c69fceed6c28900e20ac
 If needed you can easily use other animations though. Scrollaboo simply adds a CSS class to an element, when the element is ready to be animated.
 
 ## Getting Started
