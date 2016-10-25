@@ -1,0 +1,20 @@
+{
+  "name"        : "scrollaboo",
+  "description" : "Easy and flexible scroll animations using CSS3 animations.",
+  "main"        : ["dist/scrollaboo.js"],  
+  "moduleType"  : ["globals"],
+  "keywords"    : [     
+    "scroll",
+    "reveal",
+    "animation",
+    "css",    
+    "javascript"
+  ],
+  "authors"     : ["Pelle Lagermann"],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"   
+  ]
+}
