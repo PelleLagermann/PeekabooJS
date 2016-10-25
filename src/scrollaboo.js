@@ -155,12 +155,12 @@
 		return elems;
 	};	
 	
-    window.scrollaboo = function (options) {
+    window.scrollaboo = function (input1, input2) {
 		var r = {},			
 			eventTimeout,
-			windowDimensions;
-
-		var eventThrottler = function (event) {
+			windowDimensions,
+			options = {},
+			eventThrottler = function (event) {
 			if ( !eventTimeout ) {
 				eventTimeout = setTimeout(function() {
 					eventTimeout = null;					
@@ -172,7 +172,16 @@
 					r.update();				
 				}, 66);
 			}
-		};		
+		};
+
+		if (typeof input1 === "object") {
+			options = input1;
+		} else if (typeof input1 === "string") {
+			if (typeof input2 === "object") {
+				options = input2;
+			}
+			options.selector = input1;
+		}		
 
 		r.setDistances = function () {						
 			var windowScrollPosition = getWindowScrollPos();
@@ -215,7 +224,7 @@
 		};		
 
     	// Merge default and user options
-		settings = extend( defaults, options || {} );
+		settings = extend( defaults, options );
 
     	r.elems = getElems(settings.selector);
     	if (r.elems.length === 0 ) {

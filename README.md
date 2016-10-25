@@ -12,10 +12,10 @@ If needed you can easily use other animations though. Scrollaboo simply adds a C
     //Default settings - By default scrollaboo will animate all elements with a data-reveal attribute 
     var boo = scrollaboo()
     
-    //Custom selector
+    //To use a custom selector instead, simply pass it to scrollaboo
     var boo = scrollaboo("h1, .foo")
  
-    //Custom settings
+    //Custom settings - To adjust settings, simply pass an object with the desired settings 
     scrollaboo({ 
         selector:       "h1, .foo",
         buffer:         250 

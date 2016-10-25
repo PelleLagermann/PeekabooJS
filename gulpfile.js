@@ -1,16 +1,20 @@
 "use strict";
 
 var gulp   = require("gulp"),    
+    sass = require("gulp-sass"),
+    autoprefixer = require("gulp-autoprefixer"),
+    cleanCSS = require("gulp-clean-css"),    
+    notify = require("gulp-notify"),
     jshint = require("gulp-jshint"),
     uglify = require("gulp-uglify"),        
     livereload = require("gulp-livereload"),
     http = require("http"),
-    st = require("st"),
-    sass = require("gulp-sass"),
+    st = require("st"),    
     rename = require("gulp-rename");
 
 var settings = new function () {
   this.src = "src";
+  this.demoHtml = "demo/**/*.html";
   this.demoCSS = "demo/stylesheets/css";
   this.demoSCSS = "demo/stylesheets/scss";
   this.demoJS = "demo/js";  
@@ -42,9 +46,21 @@ gulp.task("js", function() {
  * DEMO
 \****************************/
 gulp.task("demoStyles", function() {
-    gulp.src(settings.demoSCSS + "/**/*.scss")
-        .pipe(sass().on("error", sass.logError))
+    return gulp.src(settings.demoSCSS + "/**/*.scss")
+        .pipe(sass({ outputStyle: 'compressed' })
+            .on('error', sass.logError))
+            .on("error", notify.onError(function(error) { return "Error: " + error.message; }))
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false,
+        	remove: false
+        }))
+        .pipe(cleanCSS())
         .pipe(gulp.dest(settings.demoCSS))
+        .pipe(notify({
+            title: "Success",
+            message: "<%= file.relative %> compiled!"
+        }))        
         .pipe(livereload());
 });
 
@@ -59,6 +75,10 @@ gulp.task("server", function(done) {
   ).listen(8080, done);
 
   console.log("Serving on: http://localhost:8080/");  
+});
+gulp.task("performLiveReload", function () {
+    return gulp.src(settings.demoHtml)
+    .pipe(livereload());    
 });
 
 // define the default task and add the watch task to it
@@ -77,7 +97,8 @@ gulp.task("default", ["init"], function() {
     //Scrollaboo
     gulp.watch(settings.src + "/**/*.js", ["lint", "js"]);
     //DEMO
-    gulp.watch(settings.demoSCSS + "/**/*.scss", ["demoStyles"]);    
+    gulp.watch(settings.demoSCSS + "/**/*.scss", ["demoStyles"]);
+    gulp.watch(settings.demoHtml, ["performLiveReload"]);
 });
 
 gulp.task("init", ["server", "lint", "demoStyles", "js"]);

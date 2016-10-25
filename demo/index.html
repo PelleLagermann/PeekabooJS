@@ -153,7 +153,7 @@
 		</section>
 
 		<!-- Footer -->
-		<section id="footer">
+		<section id="footer">			
 			<ul class="icons">
 				<li><a href="https://twitter.com/remotesynth" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
 				<li><a href="https://www.instagram.com/remotesynth/" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
@@ -168,13 +168,14 @@
 
 		<script src="js/scrollaboo.js"></script>
 		<script>
-			var scrollaboo = scrollaboo({
+			var boo = scrollaboo({
 				buffer: 200,
 				callback: function (ret) {
 					ret.elem.classList.add("red");
-				}
+				}				
 			});
-			console.log(scrollaboo);
+			
+			console.log(boo);
 		</script>
     </body>
 </html>

@@ -1,15 +1,18 @@
 {
   "name": "Scrollaboo",
   "version": "0.1.0",
-  "devDependencies": {
+  "dependencies": {
     "gulp": "^3.9.1",
-    "gulp-jshint": "^2.0.1",
-    "gulp-livereload": "^3.8.1",
-    "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.3.2",
-    "gulp-uglify": "^2.0.0",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-clean-css": "^2.0.10",
+    "gulp-rename": "^1.2.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-jshint": "^2.0.1",
     "jshint": "^2.9.3",
     "jshint-stylish": "^2.2.1",
-    "st": "^1.2.0"
+    "st": "^1.2.0",
+    "gulp-livereload": "^3.8.1",    
+    "gulp-uglify": "^2.0.0"    
   }
 }

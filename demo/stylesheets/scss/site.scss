@@ -1,3 +1,5 @@
+@charset 'utf-8'; //Force utf-8 to avoid any issues with string encodings 
+
 @import "2_Tools/all";
 @import "4_Base/all";
 @import "6_Modules/all";
