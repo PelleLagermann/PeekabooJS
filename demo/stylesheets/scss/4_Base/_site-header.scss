@@ -1,0 +1,41 @@
+.site-header {    
+    background-color: #fff;    
+    margin-bottom: 6em;
+}
+
+.site-header__content {
+    display: flex;
+    height: 150px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-title {
+    font-family: 'Lobster', cursive;
+    font-size: 6rem;
+}
+
+.logo {
+    display: flex;
+    flex-wrap: wrap;
+    width: 120px;
+    height: 120px;
+    justify-content: space-between;
+    align-content: space-between;
+}
+.logo__square {
+    width: 48%;
+    height: 48%;
+    background-color: #7db9e8;
+    border-radius: 5px;
+}
+.logo__square.br {
+    background-color: #bdbdbd;
+    transform: rotate(-10deg);
+}
+
+.profile-picture {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}

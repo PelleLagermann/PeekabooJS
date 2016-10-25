@@ -1,0 +1,20 @@
+html {
+    font-size: 10px;
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: 'Signika', sans-serif;
+    background: radial-gradient(ellipse at center, #c4ebff 0%,#7db9e8 100%);
+    background-attachment: fixed;    
+    height: 100%;
+}
+
+h1, h2, h3 {
+    font-family: 'Lobster', cursive;
+}
+h1 {
+    margin: 0 0 0.5em;
+    font-size: 8rem;
+    color: #fff;
+}
