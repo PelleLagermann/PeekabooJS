@@ -14,7 +14,7 @@ var gulp   = require("gulp"),
 
 var settings = new function () {
   this.src = "src";
-  this.demoHtml = "demo/**/*.html";
+  this.demoHtml = "index.html";
   this.demoCSS = "demo/stylesheets/css";
   this.demoSCSS = "demo/stylesheets/scss";
   this.demoJS = "demo/js";  
@@ -22,7 +22,7 @@ var settings = new function () {
 };
 
 /****************************\
- * SCROLLABOO
+ * PEEKABOO
 \****************************/
 //Linting
 gulp.task("lint", function() {
@@ -65,40 +65,47 @@ gulp.task("demoStyles", function() {
 });
 
 /****************************\
+ * IMPORT ANIMATE.CSS
+\****************************/
+var animateCssFiles = [
+    "AnimateCSS/animate.css",
+    "AnimateCSS/animate.min.css"
+];
+
+gulp.task("ImportAnimateCSS", function () {    
+    return gulp.src(animateCssFiles)
+        .pipe(gulp.dest(settings.dist));
+});
+
+/****************************\
  * LIVE RELOAD
 \****************************/
 //http://localhost:8080/
 //Remember to enable livereload in chrome - https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei?hl=en
-gulp.task("server", function(done) {
-  http.createServer(
-    st({ path: __dirname + "/demo", index: "index.html", cache: false })
-  ).listen(8080, done);
+gulp.task("server", function(done) {    
+    http.createServer(        
+        st({ path: __dirname, index: "index.html", cache: false })
+    ).listen(8080, done);    
 
   console.log("Serving on: http://localhost:8080/");  
 });
 gulp.task("performLiveReload", function () {
     return gulp.src(settings.demoHtml)
-    .pipe(livereload());    
+        .pipe(livereload());    
 });
-
-// define the default task and add the watch task to it
-//gulp.task("default", ["jshint", "watch", "nmjsDist"]);
-
-// gulp.task("watch", ["server"], function() {
-//   livereload.listen();
-//   gulp.watch("src/**/*.js", ["jshint", "nmjsDist"]);
-//   gulp.watch("dist/**/*.html");
-// });
-
 
 gulp.task("default", ["init"], function() {
     livereload.listen();
 
     //Scrollaboo
     gulp.watch(settings.src + "/**/*.js", ["lint", "js"]);
+
+    //Import AnimateCSS
+    gulp.watch(animateCssFiles, ["ImportAnimateCSS"]);
+
     //DEMO
     gulp.watch(settings.demoSCSS + "/**/*.scss", ["demoStyles"]);
     gulp.watch(settings.demoHtml, ["performLiveReload"]);
 });
 
-gulp.task("init", ["server", "lint", "demoStyles", "js"]);
+gulp.task("init", ["server", "lint", "demoStyles", "js", "ImportAnimateCSS"]);

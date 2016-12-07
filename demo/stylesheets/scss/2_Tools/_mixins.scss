@@ -16,3 +16,27 @@
   @return mix(black, $color, $percentage);
 }
 
+@mixin clearfix() {
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+@mixin rotated-text($num-letters: 100, $angle-span: 180deg, $angle-offset: 0deg) {
+  $angle-per-char: $angle-span / $num-letters;
+  @for $i from 1 through $num-letters {
+    .char#{$i} {
+      transform:rotate($angle-offset + $angle-per-char * $i);
+    }
+  }
+}
+
+
+.clearfix {
+  @include clearfix();
+}

@@ -1,5 +1,5 @@
 {
-  "name": "Scrollaboo",
+  "name": "PeekabooJS",
   "version": "0.1.0",
   "dependencies": {
     "gulp": "^3.9.1",
