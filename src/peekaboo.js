@@ -21,15 +21,26 @@
 
 	// Default settings
 	var defaults = {
-		selector: '[data-peekaboo]',			//Selector for elems		
-		buffer: 200,							//Number of pixels above the bottom of the screen before animating
-		delay: 0,								//Delay before animating
-		animation: "slideInUp",					//Default animation 
-		animateOnInit: true,					//Should items animate on page load or only when scolled into view
-		resetAnimations: true,					//Determines if items should animate everytime they are scrolled into view
-		callback: function () {}				//Callback with revealed element
-	},
-	settings;
+			selector: '[data-peekaboo]',			//Selector for elems		
+			buffer: 200,							//Number of pixels above the bottom of the screen before animating
+			delay: 0,								//Delay before animating
+			animation: "slideInUp",					//Default animation 
+			animateOnInit: true,					//Should items animate on page load or only when scolled into view
+			resetAnimations: true,					//Determines if items should animate everytime they are scrolled into view
+			callback: function () {}				//Callback with revealed element
+		},
+		globals = {
+			windowDimensions: null,
+			scrollPosition: {
+				before: null,
+				now: null
+			},
+			bufferZone: {
+				top: null,
+				bottom: null
+			}
+		},
+		settings;
 
 	var forEach = function ( collection, callback, scope ) {
 		if ( Object.prototype.toString.call( collection ) === '[object Object]' ) {
@@ -172,15 +183,6 @@
     window.peekaboo = function (input1, input2) {
 		var r = {},			
 			eventTimeout,
-			windowDimensions,
-			scrollPosition = {
-				before: getWindowScrollPos(),
-				now: getWindowScrollPos()
-			},
-			bufferZone= {
-				top: null,
-				bottom: null
-			},
 			options = {},
 			eventThrottler = function (event) {
 				console.log("eventThrottler");
@@ -213,15 +215,15 @@
 
 		r.setDistances = function () {						
 			var windowScrollPosition = getWindowScrollPos();
-			windowDimensions = {
+			globals.windowDimensions = {
 				width: document.documentElement.clientWidth || document.body.clientWidth,
 				height: document.documentElement.clientHeight || document.body.clientHeight
 			};
 			
 			console.log("windowScrollPosition.top", windowScrollPosition.top);
 			console.log("settings.buffer", settings.buffer);
-			bufferZone.top = windowScrollPosition.top + settings.buffer;
-			bufferZone.bottom = windowScrollPosition.top + windowDimensions.height - settings.buffer;
+			globals.bufferZone.top = windowScrollPosition.top + settings.buffer;
+			globals.bufferZone.bottom = windowScrollPosition.top + globals.windowDimensions.height - settings.buffer;
 
 			window.scrollTo(0, 0);
 			forEach(this.elems, function (elem) {					
@@ -235,6 +237,10 @@
 		
 		r.init = function () {
 			console.log("*** INIT ***");
+			
+			//Initialize scroll position
+			globals.scrollPosition.now = globals.scrollPosition.before = getWindowScrollPos();
+						
 			//Gets elements
 			r.elems = getElems(settings.selector);
 			if (r.elems.length === 0 ) {
@@ -247,19 +253,19 @@
 			//Sets inital values for data-in-view and data-animate-on-peek
 			//Animates items in view if settings.animateOnInit
 			///settings.resetAnimations
-			var bufferZoneTop = scrollPosition.now.top + settings.buffer,
-				bufferZoneBottom = scrollPosition.now.top + windowDimensions.height - settings.buffer;
+			var bufferZoneTop = globals.scrollPosition.now.top + settings.buffer,
+				bufferZoneBottom = globals.scrollPosition.now.top + globals.windowDimensions.height - settings.buffer;
 			
-			console.log("bufferZone.top", bufferZone.top, "bufferZone.bottom", bufferZone.bottom);
+			console.log("bufferZone.top", globals.bufferZone.top, "bufferZone.bottom", globals.bufferZone.bottom);
 			forEach(this.elems, function (elem) {
 				//Is item in view?
 				console.log("elem top", elem.position.top, "elem bottom", elem.position.bottom, elem.elem);
-				console.log("above & below", elem.position.top >= bufferZone.top && elem.position.top <= bufferZone.bottom);
-				console.log("bottom in view", elem.position.bottom >= bufferZone.top && elem.position.bottom <= bufferZone.bottom);
-				console.log("top in view", elem.position.top <= bufferZone.top && elem.position.bottom >= bufferZone.bottom);
-				if ((elem.position.top >= bufferZone.top && elem.position.top <= bufferZone.bottom) ||
-					(elem.position.bottom >= bufferZone.top && elem.position.bottom <= bufferZone.bottom) ||
-					(elem.position.top <= bufferZone.top && elem.position.bottom >= bufferZone.bottom)) 
+				console.log("above & below", elem.position.top >= globals.bufferZone.top && elem.position.top <= globals.bufferZone.bottom);
+				console.log("bottom in view", elem.position.bottom >= globals.bufferZone.top && elem.position.bottom <= globals.bufferZone.bottom);
+				console.log("top in view", elem.position.top <= globals.bufferZone.top && elem.position.bottom >= globals.bufferZone.bottom);
+				if ((elem.position.top >= globals.bufferZone.top && elem.position.top <= globals.bufferZone.bottom) ||
+					(elem.position.bottom >= globals.bufferZone.top && elem.position.bottom <= globals.bufferZone.bottom) ||
+					(elem.position.top <= globals.bufferZone.top && elem.position.bottom >= globals.bufferZone.bottom)) 
 				{
 					elem.elem.dataset.inView = "true";
 
@@ -322,16 +328,16 @@
 		r.update = function (scrolling) {
 			console.log("*** UPDATE ***");
 			var windowScrollPosition = getWindowScrollPos();
-			windowDimensions = {
+			globals.windowDimensions = {
 				width: document.documentElement.clientWidth || document.body.clientWidth,
 				height: document.documentElement.clientHeight || document.body.clientHeight
 			};			
-			bufferZone.top = windowScrollPosition.top + settings.buffer;
-			bufferZone.bottom = windowScrollPosition.top + windowDimensions.height - settings.buffer;
+			globals.bufferZone.top = windowScrollPosition.top + settings.buffer;
+			globals.bufferZone.bottom = windowScrollPosition.top + globals.windowDimensions.height - settings.buffer;
 
-			scrollPosition.before = scrollPosition.now;
-			scrollPosition.now = getWindowScrollPos();
-			var scrollDirection = scrolling ? (scrollPosition.before.top < scrollPosition.now.top ? "down" : "up") : null;
+			globals.scrollPosition.before = globals.scrollPosition.now;
+			globals.scrollPosition.now = getWindowScrollPos();
+			var scrollDirection = scrolling ? (globals.scrollPosition.before.top < globals.scrollPosition.now.top ? "down" : "up") : null;
 			
 			forEach(this.elems, function (elem) {
 				// ANIMATION FLOW
@@ -345,9 +351,9 @@
 				// Reset animations === false
 				// - data-animate-on-peek will be false for all items that have already been animated and items that were above the fold on load			
 				
-				if ((elem.position.top >= bufferZone.top && elem.position.top <= bufferZone.bottom) ||
-					(elem.position.bottom >= bufferZone.top && elem.position.bottom <= bufferZone.bottom) ||
-					(elem.position.top <= bufferZone.top && elem.position.bottom >= bufferZone.bottom)) 
+				if ((elem.position.top >= globals.bufferZone.top && elem.position.top <= globals.bufferZone.bottom) ||
+					(elem.position.bottom >= globals.bufferZone.top && elem.position.bottom <= globals.bufferZone.bottom) ||
+					(elem.position.top <= globals.bufferZone.top && elem.position.bottom >= globals.bufferZone.bottom)) 
 				{
 					elem.elem.dataset.inView = "true";
 					setTimeout(function() {
